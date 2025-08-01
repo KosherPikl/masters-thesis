@@ -55,4 +55,4 @@ while True:
 	message = "Left" 						# Write Command
 	sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
 	print(f"Sent: {message} to {UDP_IP}:{UDP_Port}") # Confirm send
-	time.sleep(2)  							# Wait 2 seconds
+	time.sleep(0.1)  							# Wait 0.1 seconds
