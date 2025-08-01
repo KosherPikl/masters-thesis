@@ -1,11 +1,13 @@
 '''
 Tuck Forbes Master's Thesis Code V1
-7/31/25  
-This code combines the accelerometer and camera code examples found 
-online. The BMI160 accelerometer uses I2C and the RT1062 camera uses UART.
-Example code and sources can be found in folder titled Example Code
+8/1/25  
+This code receives sensor data and sends out commands to the other 
+raspberry pi. The sensors used are BMI160 and RT1062 camera. The commands
+sent are strings of data.
 '''
 
+
+import socket					# UDP library
 from DFRobot_BMI160 import * 	# Accelerometer library
 import serial 					# Serial library for UART
 import numpy as np				# Library for matrices and vectors
@@ -18,6 +20,12 @@ bmi160 = DFRobot_BMI160_IIC(addr = BMI160_IIC_ADDR_SDO_L)
 
 # Opening serial port for UART
 ser = serial.Serial ("/dev/serial0", 19200) # Open UART port with baud rate
+
+# Setting UDP IP address and socket for receiver
+UDP_IP = "192.168.1.155" 					# receiver IP address
+UDP_Port = 5555 							# port for receiving data
+sock = socket.socket(socket.AF_INET,		# Internet 
+	socket.SOCK_DGRAM) 						# UDP
 
 # Checking connection to BMI160
 while bmi160.begin() != BMI160_OK:
@@ -42,3 +50,9 @@ while True:
 	data_left = ser.inWaiting()             # Check for remaining data
 	received_data += ser.read(data_left) 	# Combine data
 	print (received_data)                   # Print received data
+	
+# Command send section
+	message = "Left" 						# Write Command
+	sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
+	print(f"Sent: {message} to {UDP_IP}:{UDP_Port}") # Confirm send
+	time.sleep(2)  							# Wait 2 seconds
