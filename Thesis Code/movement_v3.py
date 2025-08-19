@@ -176,7 +176,7 @@ def lower_right(speed):
 
 while True:
     data,addr = sock.recvfrom(1024) # data size and receive data
-	command = data.decode() # data type and unpack data here
+    command = data.decode() # data type and unpack data here
 
     while command == "Forward":
         print("Forward") 
