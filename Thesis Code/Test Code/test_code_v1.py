@@ -93,7 +93,7 @@ while True:
 	
 # Camera section
 	received_data = ser.read()              # Read serial port
-	time.sleep(0.05)						# Wait 0.05 seconds
+	time.sleep(0.25)						# Wait 0.25 seconds
 	data_left = ser.inWaiting()             # Check for remaining data
 	received_data += ser.read(data_left) 	# Combine data
 	'''
@@ -154,11 +154,17 @@ while True:
 	message = command 						# Write Command
 	sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
 	print(f"Sent: {message} to {UDP_IP}:{UDP_Port}")  # Confirm send
-	time.sleep(wait_time)  					# Wait before sending again
+	time.sleep(wait_time)  					# Wait before stopping
+	# Stop vehicle
+	message = "Stop"
+	sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
+	
 # Check if docking has occurred
-	if GPIO.input(inpin):
+	while GPIO.input(inpin):
 		print("Docking Successful")
-		GPIO.output(outpin,GPIO.HIGH)
-	else:
-		GPIO.output(outpin,GPIO.LOW)
+		GPIO.output(outpin,GPIO.HIGH)	# Turn on LED
+		message = "Stop"				# Stop Vehicle
+		sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
+
+	GPIO.output(outpin,GPIO.LOW)
 	time.sleep(0.1)
