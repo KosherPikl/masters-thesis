@@ -25,7 +25,7 @@ bmi160 = DFRobot_BMI160_IIC(addr = BMI160_IIC_ADDR_SDO_L)
 ser = serial.Serial ("/dev/serial0", 19200) # Open UART port with baud rate
 
 # Setting UDP IP address and socket for receiver
-UDP_IP = "192.168.1.155" 					# receiver IP address
+UDP_IP = "192.168.2.155" 					# receiver IP address
 UDP_Port = 5555 							# port for receiving data
 sock = socket.socket(socket.AF_INET,		# Internet 
 	socket.SOCK_DGRAM) 						# UDP

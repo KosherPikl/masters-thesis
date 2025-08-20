@@ -12,7 +12,7 @@ pwm =  PCA9685(i2c_bus) # Initialise the PCA9685 using the default address (0x40
 
 move_speed = 0x2FFF  # hexadecimal, Max pulse length out of 0xFFFF
 
-UDP_IP = "192.168.1.155"            # receiver IP address
+UDP_IP = "192.168.2.155"            # receiver IP address
 UDP_Port = 5555                     # port for data reception
 sock = socket.socket(socket.AF_INET,# Internet
     socket.SOCK_DGRAM)              # UDP
