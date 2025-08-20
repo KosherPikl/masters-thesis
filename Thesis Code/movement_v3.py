@@ -176,6 +176,7 @@ def lower_right(speed):
 command = "Stop"
 
 while True:
+<<<<<<< HEAD
     try :
         data,addr = sock.recvfrom(1024) # receive data
     except :
@@ -190,6 +191,10 @@ while True:
         elif command == "Stop":
             print("Stop")
             stop_car()
+=======
+    data,addr = sock.recvfrom(1024) # data size and receive data
+    command = data.decode() # data type and unpack data here
+>>>>>>> cce141ed0c0f9ad73c23014ba6f98030fcab7e3a
 
         elif command == "Back":
             print("Back")
