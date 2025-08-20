@@ -93,7 +93,7 @@ while True:
 	
 # Camera section
 	received_data = ser.read()              # Read serial port
-	time.sleep(0.25)						# Wait 0.25 seconds
+	time.sleep(0.25)						# Wait 0.025 seconds
 	data_left = ser.inWaiting()             # Check for remaining data
 	received_data += ser.read(data_left) 	# Combine data
 	
@@ -102,13 +102,14 @@ while True:
 	
 	cam_data_decode = received_data.decode()
 	cam_data_list = cam_data_decode.split()	# Make data into list
-	'''
+	
 	print(cam_data_list)	
 	print(type(cam_data_list))
-	'''
+	
 	cam_data = np.zeros(6)
 	for i in range(6):
 		cam_data[i] = float(cam_data_list[i]) # make data into float
+	TAG_ID = float(cam_data_list[6])
 		
 	#print(cam_data)
 	trans_data = cam_data[:3]
@@ -120,11 +121,11 @@ while True:
 # Control law section
 	forw_dist = -1*trans_data[2]; 	# Data comes out - so mult by -1
 	l_r_dist = trans_data[1];	# Left is - right is +
-	'''
-	print(l_r_dist)
+	
+	#print(l_r_dist)
 	rot_angle = -1*(rot_data[0]-180); # + is CW - is CCW (data is 0-360)
-	print(rot_angle)
-	'''
+	#print(rot_angle)
+	
 	'''
 	Step 1: Align with target in l/r direction
 	Step 2: Align with target in angle
@@ -147,7 +148,7 @@ while True:
 		else: 					# If not CW from target move CW
 			command = "CW"		# Set command to CW
 	elif abs(forw_dist) >= forw_tol:	
-		wait_time = sqrt(abs(forw_dist))
+		wait_time = math.sqrt(abs(forw_dist))
 		command = "Forward"
 		
 # Command send section
@@ -158,6 +159,7 @@ while True:
 	# Stop vehicle
 	message = "Stop"
 	sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
+	print(f"Sent: {message} to {UDP_IP}:{UDP_Port}")  # Confirm send
 	
 # Check if docking has occurred
 	while GPIO.input(inpin):
