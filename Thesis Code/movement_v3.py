@@ -229,6 +229,6 @@ while True:
             lower_right(move_speed)
 
 
-        else command == "LowL":
+        elif command == "LowL":
             print("LowL")
             lower_left(move_speed)
