@@ -176,59 +176,55 @@ def lower_right(speed):
 command = "Stop"
 
 while True:
-    try :
-        data,addr = sock.recvfrom(1024) # receive data
-    except :
-        command = command
-    else :
-        command = data.decode() # unpack data
-    finally: 
-        if command == "Forward":
-            print("Forward") 
-            go_ahead(move_speed)
-            
-        elif command == "Stop":
-            print("Stop")
-            stop_car()
+    data,addr = sock.recvfrom(1024) # receive data
+    command = data.decode() # unpack data
 
-        elif command == "Back":
-            print("Back")
-            go_back(move_speed)
+    if command == "Forward":
+        print("Forward") 
+        go_ahead(move_speed)
+        
+    elif command == "Stop":
+        print("Stop")
+        stop_car()
+
+    elif command == "Back":
+        print("Back")
+        go_back(move_speed)
 
 
-        elif command == "Right":
-            print("Right")
-            shift_right(move_speed)
+    elif command == "Right":
+        print("Right")
+        shift_right(move_speed)
 
 
-        elif command == "Left":
-            print("Left") 
-            shift_left(move_speed)
+    elif command == "Left":
+        print("Left") 
+        shift_left(move_speed)
 
-        elif command == "CW":
-            print("CW")
-            turn_right(move_speed)
+    elif command == "CW":
+        print("CW")
+        turn_right(move_speed)
 
-        elif command == "CCW":
-            print("CCW")
-            turn_left(move_speed)
-
-
-        elif command == "UpR":
-            print("UpR")
-            upper_right(move_speed)
+    elif command == "CCW":
+        print("CCW")
+        turn_left(move_speed)
 
 
-        elif command == "UpL":
-            print("UpL")
-            upper_left(move_speed)
+    elif command == "UpR":
+        print("UpR")
+        upper_right(move_speed)
 
 
-        elif command == "LowR":
-            print("LowR")
-            lower_right(move_speed)
+    elif command == "UpL":
+        print("UpL")
+        upper_left(move_speed)
 
 
-        elif command == "LowL":
-            print("LowL")
-            lower_left(move_speed)
+    elif command == "LowR":
+        print("LowR")
+        lower_right(move_speed)
+
+
+    elif command == "LowL":
+        print("LowL")
+        lower_left(move_speed)
