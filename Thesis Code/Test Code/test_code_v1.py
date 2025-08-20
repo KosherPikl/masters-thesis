@@ -25,7 +25,7 @@ bmi160 = DFRobot_BMI160_IIC(addr = BMI160_IIC_ADDR_SDO_L)
 ser = serial.Serial ("/dev/serial0", 19200) # Open UART port with baud rate
 
 # Setting UDP IP address and socket for receiver
-UDP_IP = "192.168.1.155" 					# receiver IP address
+UDP_IP = "192.168.2.155" 					# receiver IP address
 UDP_Port = 5555 							# port for receiving data
 sock = socket.socket(socket.AF_INET,		# Internet 
 	socket.SOCK_DGRAM) 						# UDP
@@ -96,10 +96,10 @@ while True:
 	time.sleep(0.25)						# Wait 0.25 seconds
 	data_left = ser.inWaiting()             # Check for remaining data
 	received_data += ser.read(data_left) 	# Combine data
-	'''
+	
 	print (received_data)                   # Print received data
 	print (type(received_data))
-	'''
+	
 	cam_data_decode = received_data.decode()
 	cam_data_list = cam_data_decode.split()	# Make data into list
 	'''
