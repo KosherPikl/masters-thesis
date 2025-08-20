@@ -120,7 +120,7 @@ while True:
 	
 # Control law section
 	forw_dist = -1*trans_data[2]; 	# Data comes out - so mult by -1
-	l_r_dist = trans_data[1];	# Left is - right is +
+	l_r_dist = -1*trans_data[1];	# Left is - right is +
 	
 	#print(l_r_dist)
 	rot_angle = -1*(rot_data[0]-180); # + is CW - is CCW (data is 0-360)
@@ -142,7 +142,7 @@ while True:
 		else: 					# If not left of target move left
 			command = "Left"	# Set command to left
 	elif abs(rot_angle) >= ang_tol:	# If outside angle tolerance fix it
-		wait_time = 0.1*abs(rot_angle)
+		wait_time = 0.01*abs(rot_angle)
 		if rot_angle > 0:		# If CW from target move CCW
 			command = "CCW"		# Set command to CCW
 		else: 					# If not CW from target move CW
