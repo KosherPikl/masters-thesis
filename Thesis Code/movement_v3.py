@@ -194,12 +194,12 @@ while True:
 
     elif command == "Right":
         print("Right")
-        shift_right(move_speed)
+        shift_left(move_speed)
 
 
     elif command == "Left":
         print("Left") 
-        shift_left(move_speed)
+        shift_right(move_speed)
 
     elif command == "CW":
         print("CW")

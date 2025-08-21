@@ -41,6 +41,8 @@ outpin = 18
 GPIO.setup(inpin,GPIO.IN)			# Make pin input
 GPIO.setup(outpin,GPIO.OUT)			# Make pin output
 
+wait_time = 0.1 		# set signal send time
+
 # Setting LED to low to start
 GPIO.output(outpin,GPIO.LOW)
 
@@ -136,19 +138,19 @@ while True:
 	ang_tol = 5			# Set tolerance for angle here
 	
 	if abs(l_r_dist) >= l_r_tol:	# If outside l/r tolerance fix it
-		wait_time = math.sqrt(abs(l_r_dist))
+		#wait_time = 0.5*math.sqrt(abs(l_r_dist))
 		if l_r_dist > 0: 		# If left of target move right
 			command = "Right"	# Set command to right
 		else: 					# If not left of target move left
 			command = "Left"	# Set command to left
 	elif abs(rot_angle) >= ang_tol:	# If outside angle tolerance fix it
-		wait_time = 0.01*abs(rot_angle)
+		#wait_time = 0.01*abs(rot_angle)
 		if rot_angle > 0:		# If CW from target move CCW
 			command = "CCW"		# Set command to CCW
 		else: 					# If not CW from target move CW
 			command = "CW"		# Set command to CW
 	elif abs(forw_dist) >= forw_tol:	
-		wait_time = math.sqrt(abs(forw_dist))
+		#wait_time = 0.5*math.sqrt(abs(forw_dist))
 		command = "Forward"
 		
 # Command send section
