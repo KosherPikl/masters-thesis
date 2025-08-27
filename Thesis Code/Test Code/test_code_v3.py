@@ -38,14 +38,17 @@ GPIO.setwarnings(False)
 # Setting pin modes
 inpin = 16
 outpin = 18
+relaypin = 22
 GPIO.setup(inpin,GPIO.IN)			# Make pin input
 GPIO.setup(outpin,GPIO.OUT)			# Make pin output
+GPIO.setup(relaypin,GPIO.OUT)		# Set relay pin to output
 
 wait_time = 0.5 		# set signal send time
 count = 0
 
 # Setting LED to low to start
 GPIO.output(outpin,GPIO.LOW)
+GPIO.output(relaypin,GPIO.LOW)
 
 
 # Checking connection to BMI160
@@ -200,5 +203,7 @@ while True:
 		message = "Stop"				# Stop Vehicle
 		sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
 		time.sleep(10)
+		GPIO.output(relaypin,GPIO.HIGH)
 	GPIO.output(outpin,GPIO.LOW)
+	GPIO.output(relaypin,GPIO.LOW)
 	time.sleep(0.1)
