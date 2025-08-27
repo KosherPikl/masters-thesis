@@ -1,7 +1,7 @@
 '''
 Tuck Forbes Master's Thesis Code
-Docking Test 1
-8/19/25  
+Docking Test 3
+8/25/25  
 This code combines the PD controller and the docking light code into one
 file to test autonomous rendezvous & docking
 '''
@@ -41,7 +41,8 @@ outpin = 18
 GPIO.setup(inpin,GPIO.IN)			# Make pin input
 GPIO.setup(outpin,GPIO.OUT)			# Make pin output
 
-wait_time = 0.25 		# set signal send time
+wait_time = 0.5 		# set signal send time
+count = 0
 
 # Setting LED to low to start
 GPIO.output(outpin,GPIO.LOW)
@@ -118,40 +119,69 @@ while True:
 	#print(trans_data)
 	rot_data = cam_data[3:]
 	#print(rot_data)
-		
+	
+	
 	
 # Control law section
 	forw_dist = -1*trans_data[2]; 	# Data comes out - so mult by -1
 	l_r_dist = -1*trans_data[1];	# Left is - right is +
-	
+	'''
 	#print(l_r_dist)
-	rot_angle = -1*(rot_data[0]-180); # + is CW - is CCW (data is 0-360)
-	#print(rot_angle)
-	
+	if rot_data[1] >= 180:
+		rot_angle = rot_data[1] - 360; # + is CW - is CCW (data is 0-360)
+	else:
+		rot_angle = rot_data[1]
+	print(rot_angle)
 	'''
-	Step 1: Align with target in l/r direction
-	Step 2: Align with target in angle
-	Step 3: Drive to target
+	rot_angle = rot_data[0] - 180
 	'''
-	l_r_tol = 0.5			# Set left right tolerance here
-	forw_tol = 0		# Set forward tolerance here
-	ang_tol = 5			# Set tolerance for angle here
+	Step 1: Find target
+	Step 2: Go towards target (rendezvous)
+		Step 2.1: Align with target in angle
+		Step 2.2: Align with target in l/r direction
+		Step 2.3: Drive to target
+	Step 3: Dock with target
+	'''
 	
+	# STEP 2
+	if TAG_ID == 10 and count == 0:	# 3 inch target
+		l_r_tol = 25		# Set left right tolerance here
+		forw_tol = 0		# Set forward tolerance here
+		ang_tol = 25			# Set tolerance for angle here
+		wait_time = 0.5
+		count = 0
+	elif TAG_ID == 9:	# 1 inch target
+		l_r_tol = 10		# Set left right tolerance here
+		forw_tol = 0		# Set forward tolerance here
+		ang_tol = 15			# Set tolerance for angle here
+		wait_time = 0.25
+		count = 1
+	else :
+		l_r_tol	= 100
+		forw_tol = 100
+		ang_tol = 360
+	# 2.1
 	if abs(l_r_dist) >= l_r_tol:	# If outside l/r tolerance fix it
 		#wait_time = 0.5*math.sqrt(abs(l_r_dist))
 		if l_r_dist > 0: 		# If left of target move right
 			command = "Right"	# Set command to right
 		else: 					# If not left of target move left
 			command = "Left"	# Set command to left
-	elif abs(rot_angle) >= ang_tol:	# If outside angle tolerance fix it
+	# 2.2
+	if abs(rot_angle) >= ang_tol:	# If outside angle tolerance fix it
 		#wait_time = 0.01*abs(rot_angle)
 		if rot_angle > 0:		# If CW from target move CCW
 			command = "CCW"		# Set command to CCW
-		else: 					# If not CW from target move CW
-			command = "CW"		# Set command to CW
+		else: 					# If not C=CW from target move CW
+			command = "CW"		# Set command to CW	
+	# 2.3
 	elif abs(forw_dist) >= forw_tol:	
 		#wait_time = 0.5*math.sqrt(abs(forw_dist))
 		command = "Forward"
+	else:
+		command = "Stop"	
+		
+	# STEP 3
 		
 # Command send section
 	message = command 						# Write Command
@@ -169,6 +199,6 @@ while True:
 		GPIO.output(outpin,GPIO.HIGH)	# Turn on LED
 		message = "Stop"				# Stop Vehicle
 		sock.sendto(message.encode(), (UDP_IP, UDP_Port)) # Send Command
-
+		time.sleep(10)
 	GPIO.output(outpin,GPIO.LOW)
 	time.sleep(0.1)
