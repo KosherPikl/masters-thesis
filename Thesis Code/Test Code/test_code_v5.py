@@ -218,3 +218,4 @@ while True:
 	GPIO.output(outpin,GPIO.LOW)
 	GPIO.output(relaypin,GPIO.LOW)
 	time.sleep(0.1)
+	print(GPIO.input(eventpin))

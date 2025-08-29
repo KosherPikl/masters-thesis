@@ -5,6 +5,7 @@ Tuck Forbes main camera code version 2
 import sensor
 import time
 import math
+import pyb
 from machine import UART
 from machine import LED
 
